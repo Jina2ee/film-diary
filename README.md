@@ -1,3 +1,3 @@
-# Recording movies
+# Film diary
 
 work in progress
