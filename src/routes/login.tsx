@@ -2,7 +2,16 @@ import { useState } from "react"
 import { styled } from "styled-components"
 import GoogleButton from "../components/google-btn"
 
-const Wrapper = styled.div``
+const Wrapper = styled.div`
+  text-align: center;
+`
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+`
 
 export default function Login() {
   const [email, setEmail] = useState("")
@@ -14,7 +23,7 @@ export default function Login() {
   }
   return (
     <Wrapper>
-      <form onSubmit={login}>
+      <Form onSubmit={login}>
         <label htmlFor='email'>EMAIL:</label>
         <input
           type='email'
@@ -30,7 +39,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         ></input>
         <button>LOGIN</button>
-      </form>
+      </Form>
       <GoogleButton />
     </Wrapper>
   )
