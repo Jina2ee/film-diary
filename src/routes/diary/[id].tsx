@@ -2,6 +2,13 @@ import { doc, getDoc } from "firebase/firestore"
 import { useParams } from "react-router-dom"
 import { auth, db } from "../../firebase"
 import { useEffect, useState } from "react"
+import Rating from "../../components/star-rating"
+import { styled } from "styled-components"
+
+const Wrapper = styled.div`
+  margin: 0 auto;
+  text-align: center;
+`
 
 export default function DiaryView() {
   let [information, setInformation] = useState<any>()
@@ -24,7 +31,7 @@ export default function DiaryView() {
   }, [])
 
   return (
-    <div>
+    <Wrapper>
       Diary View
       {information && (
         <div>
@@ -34,9 +41,14 @@ export default function DiaryView() {
             width='200'
             alt=''
           />
+          <Rating
+            change={() => console.log("")}
+            value={information.score}
+            staticRating={true}
+          />
           <p>{information.desc}</p>
         </div>
       )}
-    </div>
+    </Wrapper>
   )
 }

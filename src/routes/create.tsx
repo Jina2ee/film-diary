@@ -6,6 +6,7 @@ import { styled } from "styled-components"
 import { collection, doc, setDoc } from "firebase/firestore"
 import { auth, db } from "../firebase"
 import { useNavigate } from "react-router-dom"
+import Rating from "../components/star-rating"
 
 type FilmData = {
   page: number
@@ -51,6 +52,7 @@ export default function Create() {
   const [filmData, setFilmData] = useState<FilmData | null>(null)
   const [chosenFilm, setChosenFilm] = useState<Film>()
   const [openModal, setOpenModal] = useState(false)
+  const [ratingValue, setRatiginValue] = useState(0)
 
   const searchFilmData = async (e: React.MouseEvent<HTMLElement>) => {
     setOpenModal(true)
@@ -100,7 +102,7 @@ export default function Create() {
           releasedDate: chosenFilm.release_date,
         },
         userRef: doc(db, "users", user.uid),
-        score: 0, //
+        score: ratingValue, //
       })
     } catch (error) {
       console.log(error)
@@ -128,9 +130,7 @@ export default function Create() {
           id='film-name'
           onChange={(e) => setFilmName(e.target.value)}
         ></input>
-        {!openModal && (
-          <button onClick={searchFilmData}>Search film's name</button>
-        )}
+        <button onClick={searchFilmData}>Search film's name</button>
       </div>
       {/* Card 를 사용할수있을까..? */}
       {chosenFilm && <Card film={chosenFilm} />}
@@ -150,6 +150,13 @@ export default function Create() {
           })}
         </CardWrapper>
       )}
+      {/* 수정 필요 */}
+      <Rating
+        change={(e: any) => setRatiginValue(e.target.value)}
+        value={ratingValue}
+        staticRating={false}
+      />
+
       <textarea onChange={(e) => setDescription(e.target.value)}></textarea>
       <button>CREATE</button>
     </FormWrapper>
