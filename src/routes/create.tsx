@@ -1,36 +1,11 @@
-// 날짜, 영화 정보 (이름, 이미지... ), 평점, 후기
-
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Card from "../components/card"
 import { styled } from "styled-components"
-import { collection, doc, setDoc } from "firebase/firestore"
-import { auth, db } from "../firebase"
+import { auth } from "../firebase"
 import { useNavigate } from "react-router-dom"
 import Rating from "../components/star-rating"
-
-type FilmData = {
-  page: number
-  results: Film[]
-  total_pages: number
-  totla_results: number
-}
-
-type Film = {
-  adult: boolean
-  backdrop_path: string
-  genre_ids: number[]
-  id: number
-  original_language: string
-  original_title: string
-  overview: string
-  popularity: number
-  poster_path: string
-  release_date: string
-  title: string
-  video: boolean
-  vote_average: number
-  vote_count: number
-}
+import { filmStore } from "../hooks/films"
+import { Film, FilmData, store } from "../hooks/store"
 
 const FormWrapper = styled.form`
   display: flex;
@@ -57,25 +32,10 @@ export default function Create() {
   const searchFilmData = async (e: React.MouseEvent<HTMLElement>) => {
     setOpenModal(true)
     e.preventDefault()
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_KEY}`,
-      },
-    }
-
-    const data = await fetch(
-      `https://api.themoviedb.org/3/search/movie?query=${filmName}&include_adult=false&language=en-US&page=1`,
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response)
-        setFilmData(response)
-      })
-      .catch((err) => console.error(err))
+    const data = await filmStore.searchFilmsByKeywords(filmName)
+    setFilmData(data)
   }
+
   const setCurrentFilm = (e: React.MouseEvent<HTMLElement>, film: Film) => {
     e.preventDefault()
     setChosenFilm(film)
@@ -86,24 +46,15 @@ export default function Create() {
     e.preventDefault()
     const user = auth.currentUser
     if (!user || !chosenFilm) return alert("not user")
-    // films 안에 각각의 아이디를 가진 film이 생성되는게 아니라
-    // 하나의 userId 를 가진 필름들이 생겨야한다.
 
     try {
-      const filmsRef = doc(collection(db, "users", user?.uid, "films"))
-      await setDoc(filmsRef, {
-        createdAt: Date.now(),
-        desc: description, // enter 처리 하기
-        userId: user.uid,
-        watchedDate: watchedDate, // date.now() 로 하면 시간이 넘어가서 날짜 선택되게끔 해야함
-        film: {
-          name: chosenFilm.title,
-          imgUri: chosenFilm.poster_path,
-          releasedDate: chosenFilm.release_date,
-        },
-        userRef: doc(db, "users", user.uid),
-        score: ratingValue, //
-      })
+      await store.createFilmMemory(
+        user,
+        description,
+        watchedDate,
+        chosenFilm,
+        ratingValue
+      )
     } catch (error) {
       console.log(error)
     } finally {
@@ -111,9 +62,6 @@ export default function Create() {
     }
   }
 
-  useEffect(() => {
-    console.log("chosenFilm", chosenFilm)
-  }, [chosenFilm])
   return (
     <FormWrapper onSubmit={submit}>
       <div>
@@ -133,6 +81,7 @@ export default function Create() {
         <button onClick={searchFilmData}>Search film's name</button>
       </div>
       {/* Card 를 사용할수있을까..? */}
+      {/* pagination 필요.. */}
       {chosenFilm && <Card film={chosenFilm} />}
       {/* 누르면 모달창 뜨고,, 오버레이 뒤에 깔리는... */}
 
