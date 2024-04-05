@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -69,6 +70,10 @@ class Store {
     )
   }
 
+  async deleteMemory(user: User, id: string) {
+    return await deleteDoc(doc(db, `users/${user.uid}/films`, id))
+  }
+
   createFilmMemory(
     user: User,
     review: string,
@@ -108,3 +113,4 @@ export const store = new Store()
 // store / films 어떻게 잘 구분할건지 고민 필요
 // 이름도 정체성 들어나게 수정 필요
 // fetcher 를 사용할지에 대해서도 고민 필요
+// 에러 핸들링 어떻게 할것인지도 고민 필요
