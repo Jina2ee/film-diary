@@ -1,4 +1,52 @@
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+}
 :root {
+  --fc-border-color: black;
+  /* --fc-border: 2px solid black; */
+  --fc-daygrid-event-dot-width: 5px;
+}
+
+.fc .fc-scrollgrid {
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+}
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border: 2px solid black;
+}
+
+.fc-day-sun a {
+  color: red;
+}
+
+/* 토요일 날짜: 파란색 */
+.fc-day-sat a {
+  color: blue;
+}
+
+.kranky-regular {
+  font-family: "Kranky", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.inter {
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -22,13 +70,6 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
 
 h1 {
   font-size: 3.2em;
@@ -65,4 +106,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
