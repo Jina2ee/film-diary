@@ -20,7 +20,7 @@ export const Button = styled.span`
   font-weight: 500;
   width: 100%;
   color: black;
-  padding: 10px;
+  padding: 10px 0;
   border-radius: 50px;
   border: 0;
   display: flex;

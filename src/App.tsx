@@ -9,7 +9,6 @@ import Layout from "./components/layout"
 import DiaryView from "./routes/diary/[id]"
 
 const Wrapper = styled.div`
-  background-color: aliceblue;
   width: 100%;
   height: 100%;
 `
